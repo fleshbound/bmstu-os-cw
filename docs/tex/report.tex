@@ -1,0 +1,25 @@
+\documentclass[14pt, russian]{scrartcl}
+\include{preamble}
+\usepackage{pdfpages}
+
+\begin{document}
+	\sloppy\def
+	\figurename{Рисунок}
+	
+	%\include{title}
+	\includepdf[pages=-]{main_title}
+	
+	\setcounter{page}{3}
+	
+	\include{00-abstract}
+	\include{contents}
+	\include{01-intro}
+	\include{02-analysis}
+	\include{03-design}
+	\include{04-app}
+	\include{041-research}
+	\include{05-conclusion}
+	
+	\include{biblio}
+	\include{06-appendix}
+\end{document}

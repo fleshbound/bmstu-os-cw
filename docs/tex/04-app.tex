@@ -1,0 +1,78 @@
+\section{Технологическая часть}
+
+В данном разделе рассматриваются выбранные средства реализации программного обеспечения.
+Также представлены листинги исходного кода и модули разработанного сервера.
+Реализация учитывает формализованные требования к разрабатываемому серверу и особенности задания на данную работу.
+Например, поддерживается технология пул потоков, а в основном цикле программы происходит обращение к системному вызову select.
+
+\subsection{Средства реализации и модули программы}
+
+В качестве языка программирования, используемого при реализации, выбран язык Си.
+
+Причины выбора языка:
+\begin{itemize}
+	\item наличие системного вызова select;
+	\item соответствие требованиям задания на данную работу;
+	\item наличие системных вызовов сетевого стека для работы с сокетами (socket, accept, listen и так далее).
+\end{itemize}
+
+Программа представлена следующими модулями:
+\begin{enumerate}
+	\item main (содержит точку входа в программу, цикл с select);
+	\item thread\_pool (содержит функцию создания пула потоков);
+	\item logger (содержит функции записи информации о событиях в программе);
+	\item server (содержит функции обработки запросов);
+	\item http (содержит константы HTTP протокола).
+\end{enumerate}
+
+Получение исполняемого файла происходит при помощи компилятора gcc.
+
+Сборка проекта происходит с использованием утилиты make.
+Пример правила из файла Makefile приведен на листинге \ref{lst:make}.
+
+\begin{listing}[!h]
+	\caption{Правило make}
+	\label{lst:make}
+	\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+server: out/main.o out/logger.o out/thread_pool.o out/server.o
+	$(CC) -o $@ $^ -pthread
+
+out/logger.o: src/logger.c inc/logger.h
+	$(CC) $(CFLAGS) -o $@ -c $<
+	\end{minted}
+\end{listing}
+
+\subsection{Реализация сервера}
+
+На листинге \ref{lst:main1} представлена первая часть куска реализации точки входа в программу с циклом обработки запросов, который содержит select.
+
+\begin{listing}[!htb]
+	\caption{Часть реализации точки входа в программу с основным циклом (часть 1)}
+	\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/main.c}
+	\label{lst:main1}
+\end{listing}
+
+\newpage
+
+На листинге \ref{lst:main2} представлена вторая часть куска реализации точки входа в программу.
+Реализация функции (часть 1) работы потока из пула представлена на листинге~\ref{lst:thread}.
+
+\begin{listing}[!htb]
+\caption{Часть реализации точки входа в программу с основным циклом (часть 2)}
+\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/main2.c}
+\label{lst:main2}
+\end{listing}
+
+\begin{listing}[!htb]
+	\caption{Часть реализации функции работы потока из пула (часть 1)}
+	\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/thread.c}
+	\label{lst:thread}
+\end{listing}
+
+Реализация функции (часть 2) работы потока из пула представлена на листинге \ref{lst:thread2}.
+
+\begin{listing}[!htb]
+\caption{Часть реализации функции работы потока из пула (часть 2)}
+\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/thread2.c}
+\label{lst:thread2}
+\end{listing}

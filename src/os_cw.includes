@@ -1,0 +1,4 @@
+linux/module.h
+linux/kernel.h
+linux/usb.h
+linux/hid.h
