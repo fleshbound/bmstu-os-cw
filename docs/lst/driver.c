@@ -59,12 +59,12 @@ static void aread_intf_callback(struct urb *urb)
 
 static ssize_t aread(struct file *file, char *buffer, size_t count, loff_t *ppos)
 {
-    // printk(KERN_INFO "@ INFO : device call aread\n");
+    printk(KERN_INFO "@ INFO : device call aread\n");
     int ret;
     unsigned char *devbuf;
     devbuf = device.file_buffer;
     ret = copy_to_user(buffer, devbuf, DATA_SIZE_BYTES);
-    // printk(KERN_INFO "@ INFO : device aread success\n");
+    printk(KERN_INFO "@ INFO : device aread success\n");
     return DATA_SIZE_BYTES;
 }
 
@@ -102,12 +102,6 @@ static int mouse_probe(struct usb_interface *interface, const struct usb_device_
         }
         device.intf_in_size = usb_endpoint_maxp(intf_in);
         device.intf_in_endpoint_addr = intf_in->bEndpointAddress;
-
-        // printk(KERN_INFO "@ INFO : Interrupt In Endpoint:\n");
-        // printk(KERN_INFO "@ INFO :   Endpoint Address: %02x\n", intf_in->bEndpointAddress);
-        // printk(KERN_INFO "@ INFO :   Max Packet Size: %d\n", usb_endpoint_maxp(intf_in));
-        // printk(KERN_INFO "@ INFO :   Endpoint Type: %d\n", usb_endpoint_type(intf_in));
-        // printk(KERN_INFO "@ INFO :   Interval: %d\n", intf_in->bInterval);
 
         device.intf_in_buffer = kmalloc(device.intf_in_size, GFP_KERNEL);
         if (device.intf_in_buffer == NULL) {

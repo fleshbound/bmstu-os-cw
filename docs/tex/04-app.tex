@@ -2,4 +2,62 @@
 
 \subsection{Выбор языка и среды программирования}
 
+В качестве языка программирования выбран язык C \cite{gnu} стандарта C99, так как на этом языке написан код ядра операционной системы Linux.
+
+Для компиляции модуля был использован GNU Compiler Collection (GCC)~\cite{gcc} --- стандартный компилятор UNIX-подобных операционных систем.
+
+Сборка модуля драйвера производится автоматически с помощью утилиты make~\cite{make}.
+
 \subsection{Реализация драйвера}
+
+На листинге \ref{lst:makefile} представлен файл сборки модуля драйвера Makefile, используемый утилитой make.
+
+\begin{longlisting}
+	\singlespacing
+	\caption{Файл сборки модуля драйвера Makefile}
+	\label{lst:makefile}
+	\begin{minted}[frame=single,fontsize = \footnotesize, linenos, xleftmargin = 1.5em]{c}
+ifneq ($(KERNELRELEASE),)
+  obj-m := aceline.o
+else
+  CURRENT = $(shell uname -r)
+  KDIR = /lib/modules/$(CURRENT)/build 
+  PWD = $(shell pwd)
+
+default:
+  echo $(MAKE) -C $(KDIR) M=$(PWD) modules
+  $(MAKE) -C $(KDIR) M=$(PWD) modules
+  make clean
+
+clean:
+  @rm -f *.o .*.cmd .*.flags *.mod.c *.order
+  @rm -f .*.*.cmd *~ *.*~ TODO.*
+  @rm -fR .tmp*
+  @rm -rf .tmp_versions
+
+disclean: clean
+  @rm *.ko *.symvers
+  
+endif
+	\end{minted}
+\end{longlisting}
+
+Реализация драйвера представлена на листинге \ref{lst:driver}.
+
+\begin{longlisting}
+	\singlespacing
+	\caption{Реализация драйвера}
+	\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/driver.c}
+	\label{lst:driver}
+\end{longlisting}
+
+\subsection{Реализация демона}
+
+Реализация демона представлена на листинге \ref{lst:daemon}.
+
+\begin{longlisting}
+	\singlespacing
+	\caption{Реализация демона}
+	\inputminted[frame=single,fontsize = \footnotesize, linenos, breaklines, xleftmargin = 1.5em,breaksymbol = ""]{c}{../lst/daemon.c}
+	\label{lst:daemon}
+\end{longlisting}

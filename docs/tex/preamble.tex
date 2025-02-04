@@ -458,6 +458,7 @@ citestyle=nature]{biblatex}
 \usepackage{caption} 
 %\captionsetup[table]{justification=raggedleft} 
 %\captionsetup[figure]{justification=centering,labelsep=endash}
+\captionsetup[listing]{justification=centering,labelsep=emdash}
 \usepackage{amsmath}    % \bar    (матрицы и проч. ...)
 \usepackage{amsfonts}   % \mathbb (символ для множества действительных чисел и проч. ...)
 \usepackage{mathtools}  % \abs, \norm
@@ -477,3 +478,5 @@ citestyle=nature]{biblatex}
 \makeatletter
 \renewcommand*{\p@subsubsection}{}
 \makeatother
+
+\newenvironment{longlisting}{\captionsetup{type=listing}}{}
